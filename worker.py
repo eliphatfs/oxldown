@@ -12,7 +12,7 @@ write_dir = '/objaverse-processed1/geometry_pkl'
 
 
 def readonly_handler(func, path, execinfo): 
-    os.chmod(path, 128)  #or os.chmod(path, stat.S_IWRITE) from "stat" module
+    os.chmod(path, 511)  #or os.chmod(path, stat.S_IWRITE) from "stat" module
     func(path)
 
 
@@ -40,6 +40,7 @@ def download_thingi(idt: str):
 
 def download_smiths(idt: str):
     r = requests.get(idt, stream=True)
+    r.raise_for_status()
     namespace = uuid.NAMESPACE_DNS
     oid = str(uuid.uuid5(namespace, idt)) + '.glb'
     with open(oid, 'wb') as f:
@@ -63,7 +64,7 @@ def save(x: tuple):
     local, dst = x
     for i in range(6):
         print("upload", local, "to", dst, "attempt", i)
-        ret = os.system(f"rclone copy {local} haosus3:objaverse-xl/data/{dst}")
+        ret = os.system(f"rclone --config rclone.conf copy {local} haosus3:objaverse-xl/data/{dst}")
         if 0 == ret:
             if os.path.isdir(local):
                 shutil.rmtree(local, onerror=readonly_handler)
