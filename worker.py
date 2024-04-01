@@ -35,6 +35,7 @@ def download_thingi(idt: str):
     with open(idt, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1048576): 
             f.write(chunk)
+    time.sleep(5)
     return idt, 'thingiverse'
 
 
