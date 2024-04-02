@@ -12,6 +12,7 @@ if __name__ == '__main__':
     with open("all_id_list.json") as fi:
         work = json.load(fi)
     # work = [work[220000], work[0], work[-1]]
+    work = [w for w in work if not w.startswith('thingi')]
     random.shuffle(work)
     print("Sample:", work[:10])
     sc.serve_scheduler(sc.WorkQueue(work))
