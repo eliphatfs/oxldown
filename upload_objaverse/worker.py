@@ -8,6 +8,7 @@ import kubetk.arch.worker as wk
 
 def read(x):
     shutil.copyfile(x, os.path.basename(x))
+    return os.path.basename(x)
 
 
 def write(local):
