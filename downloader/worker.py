@@ -34,7 +34,7 @@ def download_thingi(idt: str):
     for i in range(10):
         r = requests.get(url, stream=True)
         if r.status_code == 429:
-            time.sleep(random.randint(2 ** i, 2 ** (i + 1)))
+            time.sleep(random.randint(2 ** i + 5, 2 ** (i + 1) + 5))
         else:
             break
     r.raise_for_status()
