@@ -35,7 +35,7 @@ def download_thingi(idt: str):
     with open(idt, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1048576): 
             f.write(chunk)
-    time.sleep(5)
+    time.sleep(10)
     return idt, 'thingiverse'
 
 
@@ -82,6 +82,6 @@ if __name__ == '__main__':
     ip = sys.argv[-1]
     os.makedirs(write_dir, exist_ok=True)
     wk.run_pipelined_worker(f"http://{ip}:9105", [
-        (download, 4),
+        (download, 1),
         (save, 2)
     ])
