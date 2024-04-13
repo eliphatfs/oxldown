@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import uuid
+import random
 import shutil
 import requests
 import subprocess
@@ -30,12 +31,16 @@ def download_github(idt: str):
 
 def download_thingi(idt: str):
     url = f"https://www.thingiverse.com/download:{idt}"
-    r = requests.get(url, stream=True)
+    for i in range(10):
+        r = requests.get(url, stream=True)
+        if r.status_code == 429:
+            time.sleep(random.randint(2 ** i, 2 ** (i + 1)))
+        else:
+            break
     r.raise_for_status()
     with open(idt, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1048576): 
             f.write(chunk)
-    time.sleep(10)
     return idt, 'thingiverse'
 
 
