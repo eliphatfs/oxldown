@@ -10,6 +10,8 @@ import kubetk.arch.worker as wk
 
 
 write_dir = '/objaverse-processed1/geometry_pkl'
+with open("ua_list.txt") as fi:
+    ua = random.choice(list(fi)).strip()
 
 
 def readonly_handler(func, path, execinfo): 
@@ -30,9 +32,10 @@ def download_github(idt: str):
 
 
 def download_thingi(idt: str):
+    headers = {'User-Agent': ua}
     url = f"https://www.thingiverse.com/download:{idt}"
     for i in range(10):
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, headers=headers)
         if r.status_code == 429:
             time.sleep(random.randint(2 ** i + 5, 2 ** (i + 1) + 5))
         else:
