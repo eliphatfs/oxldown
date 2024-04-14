@@ -13,7 +13,7 @@ if __name__ == '__main__':
     with open("all_id_list.json") as fi:
         work = json.load(fi)
     # work = [work[220000], work[0], work[-1]]
-    donetxt = subprocess.check_output("rclone --config rclone.conf ls haosus3:objaverse-xl/data/thingiverse/").decode().splitlines()
+    donetxt = subprocess.check_output("rclone --config rclone.conf ls haosus3:objaverse-xl/data/thingiverse/".split()).decode().splitlines()
     done = set()
     for line in donetxt:
         if line:
