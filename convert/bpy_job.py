@@ -4,7 +4,7 @@ try:
     import bpy
 
     argv = sys.argv[1:]
-    if len(argv) != 2:
+    if len(argv) != 3:
         print("python bpy_job.py input_filename fmt output_basename")
         sys.exit(1)
 
