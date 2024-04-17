@@ -1,2 +1,4 @@
 .nk8s
 __pycache__
+/load
+/save
