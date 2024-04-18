@@ -1,4 +1,5 @@
 import sys
+import json
 
 try:
     import bpy
@@ -55,7 +56,26 @@ try:
             export_attributes=True,
             check_existing=False,
         )
-    with open(output + '.success', "w") as fo:
-        pass
+    bpy.ops.object.mode_set(mode="OBJECT")
+    missing_textures = 0
+    num_textures = 0
+    for img in bpy.data.images:
+        if img.type in ('RENDER_RESULT', 'COMPOSITING'):
+            continue
+        num_textures += 1
+        if img.channels == 0:
+            missing_textures += 1
+    num_animations = len(bpy.data.actions)
+    num_armatures = len(bpy.data.armatures)
+    stats_str = bpy.context.scene.statistics(bpy.context.view_layer)
+    meta = dict(
+        stats_str=stats_str,
+        num_textures=num_textures,
+        missing_textures=missing_textures,
+        num_animations=num_animations,
+        num_armatures=num_armatures
+    )
+    with open(output + '.json', "w") as fo:
+        json.dump(meta, fo)
 except Exception:
     sys.exit(1)
