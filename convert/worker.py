@@ -3,6 +3,7 @@ import sys
 import time
 import uuid
 import json
+import gzip
 import shutil
 import subprocess
 import kubetk.arch.worker as wk
@@ -33,8 +34,13 @@ def process(x):
             if fty == 'glb':
                 shutil.copyfile(visit, f"save/{u5}.glb")
             if os.path.exists(f"save/{u5}.blend"):
-                meta_info['blend'] = subprocess.call(["rclone", "--config", "rclone-internal.conf", "copy", f"save/{u5}.blend", "haosus3:oxl-curated/blend"])
+                MEG = 2**20
+                with open(f"save/{u5}.blend", 'rb') as f_in:
+                    with gzip.open(f"save/{u5}.blend.gz", 'wb', compresslevel=1) as f_out:
+                        shutil.copyfileobj(f_in, f_out, length=2*MEG)
+                meta_info['blend'] = subprocess.call(["rclone", "--config", "rclone-internal.conf", "copy", f"save/{u5}.blend.gz", "haosus3:oxl-curated/blendgz"])
                 os.remove(f"save/{u5}.blend")
+                os.remove(f"save/{u5}.blend.gz")
             else:
                 meta_info['blend'] = 'missing'
             if os.path.exists(f"save/{u5}.glb"):
