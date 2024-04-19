@@ -1,5 +1,6 @@
 import sys
 import json
+import traceback
 
 try:
     import bpy
@@ -78,4 +79,5 @@ try:
     with open(output + '.json', "w") as fo:
         json.dump(meta, fo)
 except Exception:
+    traceback.print_exc()
     sys.exit(1)
