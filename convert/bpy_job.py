@@ -46,7 +46,11 @@ try:
     else:
         raise Exception("unknown format", fmt)
 
-    bpy.ops.file.pack_all()
+    try:
+        bpy.ops.file.pack_all()
+        fail_pack = False
+    except Exception:
+        fail_pack = True
     bpy.ops.wm.save_as_mainfile(
         filepath=output + '.blend',
         check_existing=False,
@@ -90,7 +94,8 @@ try:
         num_animations=num_animations,
         num_armatures=num_armatures,
         num_objects=num_objects,
-        fail_set_mode=fail_set_mode
+        fail_set_mode=fail_set_mode,
+        fail_pack=fail_pack
     )
     with open(output + '.json', "w") as fo:
         json.dump(meta, fo)
