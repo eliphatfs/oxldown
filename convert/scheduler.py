@@ -13,6 +13,7 @@ if __name__ == '__main__':
         groups: dict = pickle.load(fi)
 
     work = list(groups.items())
+    del groups
     random.shuffle(work)
     print("Sample:", work[:10])
     sc.serve_scheduler(sc.WorkQueue(work))
