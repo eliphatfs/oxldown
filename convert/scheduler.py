@@ -1,4 +1,6 @@
 import os
+import json
+import tqdm
 import pickle
 import random
 import kubetk.arch.scheduler as sc
@@ -12,7 +14,7 @@ if __name__ == '__main__':
     with open(".nk8s/groups.pkl", "rb") as fi:
         groups: dict = pickle.load(fi)
 
-    work = list(groups.items())
+    work = [json.dumps(x) for x in groups.items()]
     del groups
     random.shuffle(work)
     print("Sample:", work[:10])

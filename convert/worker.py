@@ -11,10 +11,10 @@ import cutil
 
 
 def download(x):
-    down, group = x
+    down, group = json.loads(x)
     xid = str(uuid.uuid4())
     subprocess.check_call(["rclone", "--config", "rclone-internal.conf", "copy", "haosus3:objaverse-xl/" + down, "load/" + xid])
-    return x, xid
+    return group, xid
 
 
 def submit_log(u5, meta: dict):
@@ -22,7 +22,7 @@ def submit_log(u5, meta: dict):
 
 
 def process(x):
-    (down, group), xid = x
+    group, xid = x
     for down, main, fty in group:
         u5 = cutil.str_hash_to_uuid(down + '::' + main)
         try:
