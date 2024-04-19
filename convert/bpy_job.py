@@ -57,6 +57,9 @@ try:
             export_attributes=True,
             check_existing=False,
         )
+    bpy.context.view_layer.update()
+    bpy.context.view_layer.objects.active = next(iter(bpy.data.objects.values()))
+    bpy.context.view_layer.update()
     bpy.ops.object.mode_set(mode="OBJECT")
     missing_textures = 0
     num_textures = 0
