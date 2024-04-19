@@ -14,7 +14,7 @@ if __name__ == '__main__':
     with open(".nk8s/groups.pkl", "rb") as fi:
         groups: dict = pickle.load(fi)
 
-    work = [json.dumps(x) for x in groups.items()]
+    work = [json.dumps(x) for x in tqdm.tqdm(groups.items())]
     del groups
     random.shuffle(work)
     print("Sample:", work[:10])
