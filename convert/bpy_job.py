@@ -46,6 +46,7 @@ try:
     else:
         raise Exception("unknown format", fmt)
 
+    bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(
         filepath=output + '.blend',
         check_existing=False,
@@ -57,10 +58,16 @@ try:
             export_attributes=True,
             check_existing=False,
         )
-    bpy.context.view_layer.update()
-    bpy.context.view_layer.objects.active = next(iter(bpy.data.objects.values()))
-    bpy.context.view_layer.update()
-    bpy.ops.object.mode_set(mode="OBJECT")
+    num_objects = len(bpy.data.objects)
+    try:
+        bpy.context.view_layer.update()
+        bpy.context.view_layer.objects.active = next(iter(bpy.data.objects.values()))
+        bpy.context.view_layer.update()
+        bpy.ops.object.mode_set(mode="OBJECT")
+        fail_set_mode = False
+    except Exception:
+        traceback.print_exc()
+        fail_set_mode = True
     missing_textures = 0
     num_textures = 0
     for img in bpy.data.images:
@@ -71,16 +78,23 @@ try:
             missing_textures += 1
     num_animations = len(bpy.data.actions)
     num_armatures = len(bpy.data.armatures)
-    stats_str = bpy.context.scene.statistics(bpy.context.view_layer)
+    try:
+        stats_str = bpy.context.scene.statistics(bpy.context.view_layer)
+    except Exception as exc:
+        traceback.print_exc()
+        stats_str = "[Failed to get statistics]"
     meta = dict(
         stats_str=stats_str,
         num_textures=num_textures,
         missing_textures=missing_textures,
         num_animations=num_animations,
-        num_armatures=num_armatures
+        num_armatures=num_armatures,
+        num_objects=num_objects,
+        fail_set_mode=fail_set_mode
     )
     with open(output + '.json', "w") as fo:
         json.dump(meta, fo)
 except Exception:
+    print("Unhandled Exception")
     traceback.print_exc()
     sys.exit(1)
