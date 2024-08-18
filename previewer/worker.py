@@ -1,3 +1,4 @@
+import gc
 import os
 import sys
 import time
@@ -92,9 +93,13 @@ def normalize(gltf: Scene):
 def load(bundle):
     for i in range(8):
         try:
-            torch.zeros([1024, 1024, 4], device='cuda')
+            torch.zeros([8, 1024, 1024, 4], device='cuda')
         except torch.cuda.OutOfMemoryError:
             print("Cuda OOM, waiting for it to resolve in", 2 ** i)
+            gc.collect()
+            gc.collect()
+            gc.collect()
+            torch.cuda.empty_cache()
             if i == 7:
                 print("OOM Timeout, restarting the container...")
                 os._exit(2)
