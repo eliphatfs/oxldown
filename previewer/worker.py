@@ -164,7 +164,7 @@ if __name__ == '__main__':
     os.makedirs('save', exist_ok=True)
     wk.run_pipelined_worker(f"http://{ip}:9105", [
         (download, 16),
-        (load, 2),
+        (load, 1),
         (render, 1),
         (serialize, 2),
         (save, 4),
