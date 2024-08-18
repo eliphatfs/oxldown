@@ -90,19 +90,19 @@ def normalize(gltf: Scene):
 
 
 def load(bundle):
-    for i in range(9):
+    for i in range(8):
         try:
             torch.zeros([1024, 1024, 4], device='cuda')
         except torch.cuda.OutOfMemoryError:
             print("Cuda OOM, waiting for it to resolve in", 2 ** i)
-            if i == 8:
-                print("OOM Timeout, restarting the pod...")
-                raise SystemExit(2)
+            if i == 7:
+                print("OOM Timeout, restarting the container...")
+                os._exit(2)
             time.sleep(2 ** i)
         except RuntimeError as exc:
             if 'cuda' in repr(exc).lower():
-                print("Cuda runtime error, restarting the pod...")
-                raise SystemExit(1)
+                print("Cuda runtime error, restarting the container...")
+                os._exit(1)
     u5, path = bundle
     try:
         with open(path, 'rb') as fi:
