@@ -22,7 +22,7 @@ torch.set_grad_enabled(False)
 light = ImageEnvironmentLight(1.0, gpu_f32([1.0, 1.0, 1.0]), gpu_f32(pyexr.read("previewer/city.exr")), render_skybox=False)
 opts = SurfaceDeferredRenderSessionOptions(
     ibl_specular_samples=1024,
-    max_layers=8
+    max_layers=4
 )
 
 
