@@ -127,7 +127,7 @@ def render(bundle):
     u5, scene = bundle
     scene = normalize(scene)
     scene.add_light(light)
-    cam = PerspectiveCamera.from_orbit(1024, 1024, 3.8, 20, 15, [0, 0, 0])
+    cam = PerspectiveCamera.from_orbit(1024, 1024, 3.8, 30, 30, [0, 0, 0])
     rp = SurfaceDeferredRenderSession(scene, cam, opaque_only=False, options=opts)
     rp.set_prepare_ibl(light_cache())
     pbr_premult = rp.compose_layers(
