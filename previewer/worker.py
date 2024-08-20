@@ -82,6 +82,8 @@ def normalize(gltf: Scene):
         bmax = torch.maximum(bmax, verts.max(0)[0])
     center = (bmin + bmax) / 2
     radius = max(length(verts - center).max() for verts in world_v).item()
+    if radius == 0.0:
+        return gltf
     T = trimesh.transformations.translation_matrix(-center.cpu().numpy())
     S = trimesh.transformations.scale_matrix(1 / radius)
     M = gpu_f32(S @ T)
@@ -137,7 +139,8 @@ def load(bundle):
                     u5=u5, **problems
                 )))
     finally:
-        os.remove(path)
+        if os.path.exists(path):
+            os.remove(path)
     return u5, scene
 
 
