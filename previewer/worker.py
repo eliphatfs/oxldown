@@ -91,19 +91,19 @@ def normalize(gltf: Scene):
 
 
 def load(bundle):
-    for i in range(8):
+    for i in range(3):
         try:
             torch.zeros([8, 1024, 1024, 4], device='cuda')
         except torch.cuda.OutOfMemoryError:
-            print("Cuda OOM, waiting for it to resolve in", 2 ** i)
+            print("Cuda OOM, waiting for it to resolve in", 4 ** i)
             gc.collect()
             gc.collect()
             gc.collect()
             torch.cuda.empty_cache()
-            if i == 7:
+            if i == 2:
                 print("OOM Timeout, restarting the container...")
                 os._exit(2)
-            time.sleep(2 ** i)
+            time.sleep(4 ** i)
         except RuntimeError as exc:
             if 'cuda' in repr(exc).lower():
                 print("Cuda runtime error, restarting the container...")
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     ip = sys.argv[-1]
     os.makedirs('save', exist_ok=True)
     wk.run_pipelined_worker(f"http://{ip}:9105", [
-        (download, 16),
+        (download, 1),
         (load, 1),
         (render, 1),
         (serialize, 2),
